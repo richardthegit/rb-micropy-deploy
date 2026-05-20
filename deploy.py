@@ -12,9 +12,9 @@ def find_source(root_dir):
 
         root_dir/*/src
     """
-    src_dirs = []
+    src_dirs = [join(root_dir, 'src')]
 
-    for name in listdir(root_dir):
+    for name in listdir(join(root_dir, 'libs')):
         path = join(root_dir, name, 'src')
         if exists(path):
             src_dirs.append(path)
