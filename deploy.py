@@ -13,9 +13,10 @@ def find_source(root_dir):
         root_dir/*/src
     """
     src_dirs = [join(root_dir, 'src')]
+    lib_dir = join(root_dir, 'libs')
 
-    for name in listdir(join(root_dir, 'libs')):
-        path = join(root_dir, name, 'src')
+    for name in listdir(lib_dir):
+        path = join(lib_dir, name, 'src')
         if exists(path):
             src_dirs.append(path)
 
@@ -47,7 +48,7 @@ def copy_files(root_dir, dev):
         if exists(join(build_dir, 'store.json')):
             info('Existing store file preserved')
         else:
-            print('No store file on device')
+            warn('No store file on device')
 
         rshell(dev, ['rsync', '-m', build_dir, '/pyboard/'])
 

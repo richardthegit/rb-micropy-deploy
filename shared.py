@@ -14,7 +14,17 @@ requirements_file = join(repo_dir, 'requirements.txt')
 RED = '\033[91m'
 GREEN = '\033[92m'
 CYAN = '\033[96m'
+YELLOW = '\033[93m'
 END = '\033[0m'
+
+def ok(msg):
+    print(f'{GREEN}{msg}{END}')
+
+def info(msg):
+    print(f'{CYAN}{msg}{END}')
+
+def warn(msg):
+    print(f'{YELLOW}{msg}{END}')
 
 def err(msg, status = 1):
     """
@@ -23,12 +33,6 @@ def err(msg, status = 1):
     print(f'{RED}{msg}{END}')
     if status != None:
         exit(status)
-
-def ok(msg):
-    print(f'{GREEN}{msg}{END}')
-
-def info(msg):
-    print(f'{CYAN}{msg}{END}')
 
 
 def ensure_venv():
