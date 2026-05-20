@@ -11,16 +11,15 @@ When run, files from all *src* directories found using this naming scheme are co
     src # Project sourcecode
         my_app.py
 
-    rb-micropy-deploy # This repo
-
     libs
+        rb-micropy-deploy # This repo - ignored (no 'src' subdirectory)
         rb-micropy-core   # Dependency
             src
                 rb
                     core
                         file.py
 
-When you run *rb-micropy-deploy/deploy.py*, the hierarchy copied to the device looks like this:
+When you run *libs/rb-micropy-deploy/deploy.py .*, the hierarchy copied to the device looks like this:
 
     my_app.py
     rb
