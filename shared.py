@@ -39,7 +39,7 @@ def ensure_venv():
     if exists(rshell_binary):
         return
 
-    err(f'rshell binary not found at: {rshell_binary}', None)
+    warn(f'rshell binary not found at: {rshell_binary}', None)
     ok(f'Creating virtualenv in: {venv_dir}')
     run([sys.executable, '-m', 'venv', venv_dir])
     run([python_binary, '-m', 'pip', 'install', '-r', requirements_file])
