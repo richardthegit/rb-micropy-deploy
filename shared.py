@@ -39,7 +39,7 @@ def ensure_venv():
     if exists(rshell_binary):
         return
 
-    warn(f'rshell binary not found at: {rshell_binary}', None)
+    warn(f'rshell binary not found at: {rshell_binary}')
     ok(f'Creating virtualenv in: {venv_dir}')
     run([sys.executable, '-m', 'venv', venv_dir])
     run([python_binary, '-m', 'pip', 'install', '-r', requirements_file])
@@ -48,13 +48,16 @@ def ensure_venv():
         err('Failed to create venv')
 
 
-def rshell(dev, args):
+def rshell(dev, extra_args = None):
     """
     Call rshell. 'dev' should be just the device name, '/dev/' will be prepended.
     """
     ensure_venv()
 
-    args = [rshell_binary, '-p', f'/dev/{dev}'] + args
+    args = [rshell_binary, '-p', f'/dev/{dev}']
+    if extra_args:
+        args += extra_args
+
     info(f'Running rshell: {" ".join(args)}')
     return run(args)
 
