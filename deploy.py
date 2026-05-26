@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-from os import listdir, makedirs
+from os import listdir
 from os.path import abspath, dirname, exists, isdir, join
-from shutil import copy, copytree, rmtree
+from shutil import copy, copytree
 
 from shared import *
 
@@ -28,11 +28,7 @@ def copy_files(root_dir, dev):
     Copy all files (including any store.json already on the device) into 'build' then 
     rsync that to the device.
     """
-    if exists(build_dir):
-        err(f'Build directory already exists; delete it manually and retry: {build_dir}')
-
-    info(f'Collecting source to: {build_dir}')
-    makedirs(build_dir)
+    prepare_build(dev)
 
     try:
         src_dirs = find_source(root_dir)
@@ -43,19 +39,10 @@ def copy_files(root_dir, dev):
         for d in src_dirs:
             print(f'  {d}')
             copytree(d, build_dir, dirs_exist_ok = True)
-
-        rshell(dev, ['cp', '/pyboard/store.json', build_dir])
-        if exists(join(build_dir, 'store.json')):
-            info('Existing store file preserved')
-        else:
-            warn('No store file on device')
-
-        rshell(dev, ['rsync', '-m', build_dir, '/pyboard/'])
-
+    
+        rsync_build(dev)
     finally:
-        info('Deleting build directory')
-        rmtree(build_dir)
-
+        purge_build()
 
 if __name__ == '__main__':
     parser = std_args()

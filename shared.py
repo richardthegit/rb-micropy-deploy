@@ -1,4 +1,6 @@
+from os import makedirs
 from os.path import abspath, dirname, exists, join
+from shutil import rmtree
 from subprocess import run
 import argparse, sys
 
@@ -66,3 +68,37 @@ def std_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dev', default = 'ttyACM0', help = "Connected device name - don't include /dev/")
     return parser
+
+
+def prepare_build(dev):
+    """
+    Create the build directory and copy over any existing store file.
+    """
+    if exists(build_dir):
+        err(f'Build directory already exists; delete it manually and retry: {build_dir}')
+
+    info(f'Creating build directory: {build_dir}')
+    makedirs(build_dir)
+
+    rshell(dev, ['cp', '/pyboard/store.json', build_dir])
+
+    if exists(join(build_dir, 'store.json')):
+        ok('Existing store file preserved')
+    else:
+        warn('No store file on device')
+
+
+def rsync_build(dev):
+    """
+    rsync the contents of the build directory to the device.
+    """
+    rshell(dev, ['rsync', '-m', build_dir, '/pyboard/'])
+
+
+def purge_build():
+    """
+    The build directory should always be deleted after the files have
+    been copied.
+    """
+    info('Deleting build directory...')
+    rmtree(build_dir)
