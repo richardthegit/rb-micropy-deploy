@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from os import listdir
+from os import getcwd, listdir
 from os.path import abspath, dirname, exists, isdir, join
 from shutil import copy, copytree
 
@@ -46,7 +46,11 @@ def copy_files(root_dir, dev):
 
 if __name__ == '__main__':
     parser = std_args()
-    parser.add_argument('root_dir', help = 'Root directory')
+    parser.add_argument('dir', nargs = '?', help = 'Root directory')
     args = parser.parse_args()
 
-    copy_files(args.root_dir, args.dev)
+    if not args.dir:
+        args.dir = getcwd()
+
+    info(f'Deploying from root directory: {args.dir}')
+    copy_files(args.dir, args.dev)
