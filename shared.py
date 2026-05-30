@@ -75,7 +75,10 @@ def prepare_build(dev):
     Create the build directory and copy over any existing store file.
     """
     if exists(build_dir):
-        err(f'Build directory already exists; delete it manually and retry: {build_dir}')
+        err(f'Build directory already exists; delete it manually and retry: {build_dir}', None)
+        if input('Continue? (y/N): ') != 'y':
+            exit(1)
+        rmtree(build_dir)
 
     info(f'Creating build directory: {build_dir}')
     makedirs(build_dir)
